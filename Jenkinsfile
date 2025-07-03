@@ -1,39 +1,17 @@
 pipeline {
     agent any
 
-    environment {
-        PYTHONPATH = '.'
-    }
-
     stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Environment Check') {
             steps {
-                bat '''
-                echo Checking if Python is installed and available in PATH...
-                where python || (echo ❌ Python not found in PATH && exit /b 1)
-                python --version
-                '''
-            }
-        }
-
-        stage('Build') {
-            steps {
-                echo '⚙️ No build needed for Python script, just a demo'
+                bat 'C:\\Windows\\System32\\cmd.exe /c "where python"'
+                bat 'C:\\Windows\\System32\\cmd.exe /c "python --version"'
             }
         }
 
         stage('Test') {
             steps {
-                bat '''
-                echo Running unit tests...
-                python -m unittest test_app.py || (echo ❌ Unit tests failed && exit /b 1)
-                '''
+                bat 'C:\\Windows\\System32\\cmd.exe /c "python -m unittest test_app.py"'
             }
         }
     }
