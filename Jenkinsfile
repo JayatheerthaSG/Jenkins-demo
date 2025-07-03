@@ -1,13 +1,11 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Environment Check') {
-            steps {
-                bat 'C:\\Windows\\System32\\cmd.exe /c "where python"'
-                bat 'C:\\Windows\\System32\\cmd.exe /c "python --version"'
-            }
-        }
+    environment {
+        PATH = "C:\\Windows\\System32;${env.PATH}"
+        PYTHONPATH = "."
+    }
+
 
         stage('Test') {
             steps {
