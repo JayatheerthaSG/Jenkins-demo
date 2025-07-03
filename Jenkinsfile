@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-        PATH = "C:\\Windows\\System32;${env.PATH}"
-        PYTHONPATH = "."
+        PYTHONPATH = '.'
     }
 
     stages {
@@ -16,44 +15,35 @@ pipeline {
         stage('Environment Check') {
             steps {
                 bat '''
-                echo Checking Python installation...
-                where python
+                echo Checking if Python is installed and available in PATH...
+                where python || (echo ❌ Python not found in PATH && exit /b 1)
                 python --version
                 '''
             }
         }
 
-        stage('Setup') {
+        stage('Build') {
             steps {
-                bat '''
-                echo Installing dependencies...
-                python -m pip install --upgrade pip
-                '''
+                echo '⚙️ No build needed for Python script, just a demo'
             }
         }
 
         stage('Test') {
             steps {
                 bat '''
-                echo Running tests with pytest...
-                pytest tests/
+                echo Running unit tests...
+                python -m unittest test_app.py || (echo ❌ Unit tests failed && exit /b 1)
                 '''
-            }
-        }
-
-        stage('Done') {
-            steps {
-                echo '✅ Tests passed.'
             }
         }
     }
 
     post {
         always {
-            echo '📦 Pipeline completed.'
+            echo '📦 Pipeline finished'
         }
         failure {
-            echo '❌ Build or tests failed.'
+            echo '❌ Build or test stage failed.'
         }
     }
 }
