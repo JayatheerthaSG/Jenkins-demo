@@ -1,10 +1,21 @@
 pipeline {
     agent any
 
+    environment {
+        PYTHONPATH = '.'
+    }
+
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Environment Check') {
+            steps {
+                bat 'where python'
+                bat 'python --version'
             }
         }
 
@@ -24,7 +35,10 @@ pipeline {
 
     post {
         always {
-            echo 'Pipeline finished'
+            echo '✅ Pipeline finished'
+        }
+        failure {
+            echo '❌ Build or test failed'
         }
     }
 }
